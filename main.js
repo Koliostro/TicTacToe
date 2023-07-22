@@ -51,9 +51,11 @@ function makeTurn(selectedItem) {
                 if (isCross === true) {
                     selectedItem.style.backgroundImage = 'url(images/cross.png)';
                     field[y][x] = 'x';
+                    isCross = false;
                 } else {
                     selectedItem.style.backgroundImage = 'url(images/nought.png)';
                     field[y][x] = 'o';
+                    isCross = true;
                 }
                 break
             }
@@ -62,16 +64,8 @@ function makeTurn(selectedItem) {
 }
 
 function changes(selectedItem) {
-    if (isCross === true) {
-        makeTurn(selectedItem);   
-        isCross = false;
-        endGameLogic();
-    } 
-    else {
-        makeTurn(selectedItem);  
-        isCross = true;
-        endGameLogic();
-    }
+    makeTurn(selectedItem);   
+    endGameLogic();
 }
 
 function endGameLogic () {
