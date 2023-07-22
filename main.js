@@ -12,6 +12,7 @@ let countWinCross = 0;
 let countWinNought = 0;
 
 let isCross = false
+let won = false
 
 let field = creatingField()
 
@@ -36,6 +37,7 @@ resetingButton.addEventListener('click', () => {
     }
     cross.style.visibility = 'hidden'
     nought.style.visibility = 'hidden'
+    won = false
 })
 
 board.addEventListener('click', (event) => {
@@ -151,12 +153,14 @@ function isWonDiaganalSecond(){
 }
 
 function alertWin(countWin){
-    if (countWin === 3) {
+    if (countWin === 3 && won !== true) {
         cross.style.visibility = 'visible'
         nought.style.visibility = 'hidden'
+        won = true
     }
-    if (countWin === -3) {
+    if (countWin === -3 && won !== true) {
         nought.style.visibility = 'visible'
         cross.style.visibility = 'hidden'
+        won = true
     }
 }
