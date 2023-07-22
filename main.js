@@ -45,21 +45,20 @@ board.addEventListener('click', (event) => {
 
 function makeTurn(selectedItem) {
     for (let y = 0; y < field.length; y++) {
-        for (let x = 0; x < field[y].length; x++) {
-            if (field[y].indexOf(selectedItem.id) != -1) {
-                let x = field[y].indexOf(selectedItem.id);
+        const x = field[y].map((item, index) => {
+            if (item === selectedItem.id) {
                 if (isCross === true) {
+                    field[y][index] = 'x';
                     selectedItem.style.backgroundImage = 'url(images/cross.png)';
-                    field[y][x] = 'x';
                     isCross = false;
-                } else {
+                }
+                else {
                     selectedItem.style.backgroundImage = 'url(images/nought.png)';
-                    field[y][x] = 'o';
+                    field[y][index] = 'o';
                     isCross = true;
                 }
-                break
             }
-        }
+        })
     }
 }
 
