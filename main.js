@@ -4,9 +4,13 @@ const box = document.querySelectorAll('.box')
 const CrossWin = document.querySelector('#countWinCross');
 const NoughtWin = document.querySelector('#countWinNought');
 const resetingButton = document.querySelector('.reset');
+const newgameButton = document.querySelector('.newGame')
 
 const cross = document.querySelector('#cross')
 const nought = document.querySelector('#nought')
+
+const CrossCount = document.querySelector('#crossCount')
+const NoughtCount = document.querySelector('#noughtCount')
 
 let countWinCross = 0;
 let countWinNought = 0;
@@ -15,18 +19,6 @@ let isCross = false
 let won = false
 
 let field = creatingField()
-
-function reset() {
-    console.log(field)
-    field = creatingField();
-    for (let i = 0; i < box.length; i++) {
-        const element = box[i];
-        element.style.backgroundImage = '';
-    }
-    cross.style.visibility = 'hidden'
-    nought.style.visibility = 'hidden'
-    won = false
-}
 
 function creatingField() {
     let techField = []
@@ -41,27 +33,51 @@ function creatingField() {
     return techField;
 }
 
-resetingButton.addEventListener('click', reset)
+function updateWinCount() {
+    CrossCount.textContent = countWinCross
+    NoughtCount.textContent = countWinNought
+}
 
-board.addEventListener('click', (event) => {
-    const selectedItem = event.target;
-    changes(selectedItem);
+function reset() {
+    field = creatingField();
+    for (let i = 0; i < box.length; i++) {
+        const element = box[i];
+        element.style.backgroundImage = '';
+    }
+    won = false
+}
+
+function newGame() {
+    reset()
+    countWinCross = 0
+    countWinNought = 0
+    updateWinCount()
+}
+
+resetingButton.addEventListener('click', reset)
+newgameButton.addEventListener('click', newGame)
+
+box.forEach(element => {
+    element.addEventListener("click", (event) => {
+        const selectedItem = event.target;
+        changes(selectedItem);
+    })
 })
 
 function makeTurn(selectedItem) {
-    if (won === true) {
+    if (won) {
         return
     }
     for (let x = 0; x < field.length; x++) {
-        for (let y = 0; y < field[0].length; y++) {
+        for (let y = 0; y < field.length; y++) {
             if (field[x][y] === selectedItem.id) {
-                if (isCross === true) {
+                if (isCross) {
                     field[x][y] = 1;
-                    selectedItem.style.backgroundImage = 'url(images/cross.png)';
+                    selectedItem.style.backgroundImage = 'url(images/newNought.jpg)';
                     isCross = false;
                 }
                 else {
-                    selectedItem.style.backgroundImage = 'url(images/nought.png)';
+                    selectedItem.style.backgroundImage = 'url(images/newCross.jpg)';
                     field[x][y] = -1;
                     isCross = true;
                 }
@@ -73,7 +89,7 @@ function makeTurn(selectedItem) {
 function isAnyFreeCell() {
     let counter = 0
     for (let i = 0; i < field.length; i++) {
-        for (let j = 0; j < field[i].length; j++) {
+        for (let j = 0; j < field.length; j++) {
             if (field[i][j] === -1 || field[i][j] === 1) {
                 counter += 1
             }
@@ -90,16 +106,35 @@ function changes(selectedItem) {
     endGameLogic();
 }
 
+function Draw_win_line(type, pos) {
+    switch (type) {
+        case 'row':
+            console.log(pos, 'row won')
+            break;
+        case 'col':
+            console.log(pos, 'col won')
+            break;
+        case 'main_diag':
+            console.log('main_diag won')
+            break;
+        case 'side_diag':
+            console.log('side_diag won')
+            break;
+    }
+}
+
 function endGameLogic() {
     if (isAnyFreeCell()) {
-        const won_row = isWonRow();
-        const won_col = isWonCoulumn();
-        const main_diagon_won = isWonDiaganal();
-        const addied_diag_won = isWonDiaganalSecond();
+        isWonRow();
+        isWonCoulumn();
+        isWonDiaganal();
+        isWonDiaganalSecond();
     }
-    if(won === false && !isAnyFreeCell()) {
+    if (!won && !isAnyFreeCell()) {
         // need create visual for tie
-        console.log(1)
+        countWinCross += 1
+        countWinNought += 1
+        updateWinCount()
     }
 }
 
@@ -113,7 +148,8 @@ function isWonRow() {
         }
         if (countWin === 3 || countWin === -3) {
             alertWin(countWin)
-            return i
+            Draw_win_line('row', i)
+            return
         }
         countWin = 0
     }
@@ -129,7 +165,8 @@ function isWonCoulumn() {
         }
         if (countWin === 3 || countWin === -3) {
             alertWin(countWin)
-            return i
+            Draw_win_line('col', i)
+            return
         }
         countWin = 0
     }
@@ -144,7 +181,8 @@ function isWonDiaganal() {
     }
     if (countWin === 3 || countWin === -3) {
         alertWin(countWin)
-        return countWin
+        Draw_win_line('main_diag')
+        return
     }
 }
 
@@ -157,19 +195,19 @@ function isWonDiaganalSecond() {
     }
     if (countWin === 3 || countWin === -3) {
         alertWin(countWin)
-        return countWin
+        Draw_win_line('side_diag')
+        return
     }
 }
 
 function alertWin(countWin) {
     if (countWin === 3 && won === false) {
-        cross.style.visibility = 'visible'
-        nought.style.visibility = 'hidden'
+        countWinCross += 1
         won = true
     }
     if (countWin === -3 && won === false) {
-        nought.style.visibility = 'visible'
-        cross.style.visibility = 'hidden'
+        countWinNought += 1
         won = true
     }
+    updateWinCount()
 }

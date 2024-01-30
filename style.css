@@ -1,12 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lemon&display=swap');
+
+* {
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}
 
 .all {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .board {
+  grid-column: 2/2;
   display: inline-grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -17,55 +28,63 @@
 }
 
 .box {
-  border: 3px solid rgb(105 104 138);
+  border: 8px solid rgb(58, 57, 75);
   margin: 5px;
   display: flex;
   align-items: center;
   background: none;
+  background-size: 100%;;
   border-radius: 10px;
   background-repeat:no-repeat;
   background-position: center center;
 }
 
-.right {
-  margin: auto;
-}
-
-.reset {
+.ButtonFont {
+  background-color: lightgray;
+  opacity: 0.85;
   font-family: 'Lugrasimo', cursive;
+  font-weight: 600;
   display: block;
   margin: 30px auto 0px;
-  font-size: 30px;
-  padding: 15px;
-  background: none;
-  border: 1px solid #000;
+  font-size: 25px;
+  padding: 10px;
+  border: 5px solid #000;
   border-radius: 15px;
   cursor: pointer;
   transition: all .5s ease;
 }
 
-.reset:hover {
+.winCount {
+  font-family: 'Lemon', serif;
+  font-size: 50px;
+}
+
+.ButtonFont:hover {
   background-color: blue;
   color: #fff;
-  padding: 15px 35px;
+  padding: 10px 25px;
 }
 
 body {
-  background-image: url(images/backgound.jpg);
+  background: url(images/backgound.jpg);
+  background-repeat: no-repeat;
+  background-size: 100%;
 }
 
-#cross, #nought {
-  position:absolute;
-  top: 10px;
-  right: 300px;
-  width: 25%;
-  visibility: hidden;
+.wonCards {
+  display: flex;
+margin-top: -40px;
+  flex-direction: row;
+  gap: 100px;
+  justify-content: center;
 }
 
-#nought {
-  z-index: 0;
+.allButtons {
+  display: flex;
+  justify-content: center;
 }
 
-#cross {
-  z-index: -1;
+.controllButtons {
+  display: flex;
+  width: 30%;
 }
